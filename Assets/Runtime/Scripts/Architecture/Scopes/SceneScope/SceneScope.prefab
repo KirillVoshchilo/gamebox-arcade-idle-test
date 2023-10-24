@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryPresenter: {fileID: 0}
+  _mainMenuPresenter: {fileID: 0}
   _shopPresenter: {fileID: 0}
+  _pauseMenuPresenter: {fileID: 0}
 --- !u!1 &7914615811961273048
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,4 +107,6 @@ MonoBehaviour:
   _iconsConfiguration: {fileID: 11400000, guid: 1e5d266d0be6a8c428a60b5d19420dff, type: 2}
   _uiController: {fileID: 6395541693888717083}
   _configuration: {fileID: 11400000, guid: f2bf5b729eb1c7943a560e63d2d0567e, type: 2}
-  _shopFactory: {fileID: 11400000, guid: d40c47cbca4b8e94c8b8f3ca307ad8f7, type: 2}
+  _shopFactories:
+  - {fileID: 11400000, guid: d40c47cbca4b8e94c8b8f3ca307ad8f7, type: 2}
+  - {fileID: 11400000, guid: f1dc0bf6b1e8e724792d9aa2b570354c, type: 2}

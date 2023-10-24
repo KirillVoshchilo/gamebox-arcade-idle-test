@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
@@ -9,6 +6,7 @@ public sealed class UIController : MonoBehaviour
     [SerializeField] private InventoryPresenter _inventoryPresenter;
     [SerializeField] private MainMenuPresenter _mainMenuPresenter;
     [SerializeField] private ShopPresenter _shopPresenter;
+    [SerializeField] private PauseMenuPresenter _pauseMenuPresenter;
 
     private IAppInputSystem _appInputSystem;
 
@@ -21,6 +19,7 @@ public sealed class UIController : MonoBehaviour
     }
     public void OpenShop(ItemCost[] products)
     {
+        _appInputSystem.InventoryIsEnable = false;
         _appInputSystem.EscapeIsEnable = true;
         _appInputSystem.PlayerMovingIsEnable = false;
         _shopPresenter.gameObject.SetActive(true);
@@ -28,6 +27,7 @@ public sealed class UIController : MonoBehaviour
     }
     public void CloseShop()
     {
+        _appInputSystem.InventoryIsEnable = true;
         _appInputSystem.PlayerMovingIsEnable = true;
         _appInputSystem.EscapeIsEnable = false;
         _shopPresenter.ClearPanels();
@@ -40,15 +40,29 @@ public sealed class UIController : MonoBehaviour
         if (_inventoryPresenter.gameObject.activeSelf)
         {
             CloseInventory();
-            _appInputSystem.PlayerMovingIsEnable = true;
             return;
         }
         if (_shopPresenter.gameObject.activeSelf)
         {
             CloseShop();
-            _appInputSystem.PlayerMovingIsEnable = true;
             return;
         }
+        if (_pauseMenuPresenter.gameObject.activeSelf)
+            ClosePausePanel();
+        else OpenPausePanel();
+
+    }
+    private void OpenPausePanel()
+    {
+        _appInputSystem.InventoryIsEnable = false;
+        _appInputSystem.PlayerMovingIsEnable = false;
+        _pauseMenuPresenter.gameObject.SetActive(true);
+    }
+    private void ClosePausePanel()
+    {
+        _appInputSystem.InventoryIsEnable = true;
+        _appInputSystem.PlayerMovingIsEnable = true;
+        _pauseMenuPresenter.gameObject.SetActive(false);
     }
     private void OnInventoryPressed()
     {
@@ -65,6 +79,7 @@ public sealed class UIController : MonoBehaviour
     }
     private void CloseInventory()
     {
+        _appInputSystem.PlayerMovingIsEnable = true;
         _inventoryPresenter.Clear();
         _inventoryPresenter.gameObject.SetActive(false);
     }

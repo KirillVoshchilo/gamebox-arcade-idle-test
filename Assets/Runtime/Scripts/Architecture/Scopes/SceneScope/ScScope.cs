@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -10,10 +12,11 @@ public class ScScope : LifetimeScope
     [SerializeField] private IconsConfiguration _iconsConfiguration;
     [SerializeField] private UIController _uiController;
     [SerializeField] private Configuration _configuration;
-    [SerializeField] private ShopFactory _shopFactory;
+    [SerializeField] private ShopFactory[] _shopFactories;
 
     protected override void Configure(IContainerBuilder builder)
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         _iconsConfiguration.Construct();
         builder.RegisterComponent(_iconsConfiguration);
         builder.RegisterComponent(_worldCanvasStorage);
@@ -32,7 +35,13 @@ public class ScScope : LifetimeScope
                 playerInventorySystem.AddItem(name, quantity);
             }
             IAppInputSystem appInputSystem = container.Resolve<IAppInputSystem>();
-            _shopFactory.Construct(appInputSystem, _uiController, _worldCanvasStorage);
+            foreach (ShopFactory shopFactory in _shopFactories)
+                shopFactory.Construct(appInputSystem, _uiController, _worldCanvasStorage);
         });
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        Debug.Log("Загружена новая сцена");
     }
 }
