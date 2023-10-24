@@ -8,7 +8,7 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
     [SerializeField] private InteractionRequirements _buildRequirements;
     [SerializeField] private InteractableComp _interactableComp;
     [SerializeField] private Transform _requirementsPanelTarget;
-    [SerializeField] private GameObject _buildingPrefab;
+    [SerializeField] private AScriptableFactory _buildingFactory;
     [SerializeField] private Transform _builderTransform;
 
     private IAppInputSystem _appInputSystem;
@@ -20,7 +20,7 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
     WorldCanvasStorage worldCanvasStorage,
     IAppInputSystem appInputSystem)
     {
-        Debug.Log("Сконструировал FieldEntity");
+        Debug.Log("Сконструировал BuildingSiteEntity");
         _appInputSystem = appInputSystem;
         _interactableComp.Construct(appInputSystem);
         _playerInventory = playerInventorySystem;
@@ -61,7 +61,10 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
 
     private void OnPerformedInteraction()
     {
-        GameObject instance = Instantiate(_buildingPrefab, _builderTransform.position, _builderTransform.rotation);
+        foreach (ItemCount item in _buildRequirements.Requirements)
+            _playerInventory.RemoveItem(item.Key.Value, item.Count);
+        _buildingFactory.Parent = _builderTransform;
+        _buildingFactory.Create();
         Destroy(gameObject);
     }
 
@@ -69,7 +72,7 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
     {
         foreach (ItemCount item in _buildRequirements.Requirements)
         {
-            if (_playerInventory.GetCount(item.Name.Value) < item.Count)
+            if (_playerInventory.GetCount(item.Key.Value) < item.Count)
                 return false;
         }
         return true;

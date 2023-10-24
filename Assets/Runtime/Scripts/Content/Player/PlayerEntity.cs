@@ -56,7 +56,7 @@ public sealed class PlayerEntity : MonoBehaviour, IEntity
                 int count = interactionRequirements.Requirements.Length;
                 for (int i = 0; i < count; i++)
                 {
-                    string name = interactionRequirements.Requirements[i].Name.Value;
+                    string name = interactionRequirements.Requirements[i].Key.Value;
                     int quantity = _playerInventorySystem.GetCount(name);
                     if (quantity < interactionRequirements.Requirements[i].Count)
                         return;

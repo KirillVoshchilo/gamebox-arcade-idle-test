@@ -10,6 +10,7 @@ public class ScScope : LifetimeScope
     [SerializeField] private IconsConfiguration _iconsConfiguration;
     [SerializeField] private UIController _uiController;
     [SerializeField] private Configuration _configuration;
+    [SerializeField] private ShopFactory _shopFactory;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -26,10 +27,12 @@ public class ScScope : LifetimeScope
             int count = _configuration.StartInventoryConfiguration.Items.Length;
             for (int i = 0; i < count; i++)
             {
-                string name = _configuration.StartInventoryConfiguration.Items[i].Name.Value;
+                string name = _configuration.StartInventoryConfiguration.Items[i].Key.Value;
                 int quantity = _configuration.StartInventoryConfiguration.Items[i].Count;
                 playerInventorySystem.AddItem(name, quantity);
             }
+            IAppInputSystem appInputSystem = container.Resolve<IAppInputSystem>();
+            _shopFactory.Construct(appInputSystem, _uiController, _worldCanvasStorage);
         });
     }
 }

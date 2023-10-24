@@ -36,8 +36,10 @@ public sealed class PlayerInventorySystem
     public void RemoveItem(string name, int count)
     {
         if (_inventory.TryGetValue(name, out int value))
-            _inventory[name] = count + value;
+            _inventory[name] = value - count;
         else Debug.Log("Пытаешся отнять то, чего нет");
         _onInventoryValueChanged.Invoke(name, _inventory[name]);
+        if (_inventory[name] == 0)
+            _inventory.Remove(name);
     }
 }

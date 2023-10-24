@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryPresenter: {fileID: 0}
+  _shopPresenter: {fileID: 0}
 --- !u!1 &7914615811961273048
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,9 +98,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   _playerEntity: {fileID: 0}
   _camerasStorage: {fileID: 0}
   _worldCanvasStorage: {fileID: 0}
   _iconsConfiguration: {fileID: 11400000, guid: 1e5d266d0be6a8c428a60b5d19420dff, type: 2}
   _uiController: {fileID: 6395541693888717083}
-  _startInventoryConfiguration: {fileID: 11400000, guid: f2bf5b729eb1c7943a560e63d2d0567e, type: 2}
+  _configuration: {fileID: 11400000, guid: f2bf5b729eb1c7943a560e63d2d0567e, type: 2}
+  _shopFactory: {fileID: 11400000, guid: d40c47cbca4b8e94c8b8f3ca307ad8f7, type: 2}

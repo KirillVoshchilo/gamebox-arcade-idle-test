@@ -44,7 +44,7 @@ public class RequirementsPanel : MonoBehaviour
         {
             RequirementItemPresenter instance = Instantiate(_prefab, _content);
             instance.Count = item.Count;
-            instance.Icon = _iconsConfiguration[item.Name.Value];
+            instance.Icon = _iconsConfiguration[item.Key.Value];
             _itemsList.Add(instance);
         }
     }

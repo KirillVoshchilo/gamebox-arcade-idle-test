@@ -7,7 +7,7 @@ public class ItemCount
     [SerializeField] private Key _name;
     [SerializeField] private int _count;
 
-    public Key Name
+    public Key Key
         => _name;
     public int Count
         => _count;
