@@ -16,32 +16,23 @@ public class ScScope : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        Debug.Log("Сконфигурировал SceneScope");
+        DontDestroyOnLoad(this.gameObject);
         _iconsConfiguration.Construct();
         builder.RegisterComponent(_iconsConfiguration);
+        builder.RegisterComponent(_configuration);
         builder.RegisterComponent(_worldCanvasStorage);
         builder.RegisterComponent(_playerEntity);
         builder.RegisterComponent(_uiController);
         builder.RegisterComponent(_camerasStorage);
-        Debug.Log("Сконфигурировал SceneScope");
+        builder.Register<LevelLoader>(Lifetime.Singleton)
+            .AsSelf();
+
         builder.RegisterBuildCallback((container) =>
         {
-            PlayerInventorySystem playerInventorySystem = container.Resolve<PlayerInventorySystem>();
-            int count = _configuration.StartInventoryConfiguration.Items.Length;
-            for (int i = 0; i < count; i++)
-            {
-                string name = _configuration.StartInventoryConfiguration.Items[i].Key.Value;
-                int quantity = _configuration.StartInventoryConfiguration.Items[i].Count;
-                playerInventorySystem.AddItem(name, quantity);
-            }
             IAppInputSystem appInputSystem = container.Resolve<IAppInputSystem>();
             foreach (ShopFactory shopFactory in _shopFactories)
                 shopFactory.Construct(appInputSystem, _uiController, _worldCanvasStorage);
         });
-    }
-
-    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        Debug.Log("Загружена новая сцена");
     }
 }

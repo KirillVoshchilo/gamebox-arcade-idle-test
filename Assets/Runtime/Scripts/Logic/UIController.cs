@@ -7,6 +7,8 @@ public sealed class UIController : MonoBehaviour
     [SerializeField] private MainMenuPresenter _mainMenuPresenter;
     [SerializeField] private ShopPresenter _shopPresenter;
     [SerializeField] private PauseMenuPresenter _pauseMenuPresenter;
+    [SerializeField] private GameObject _winCanvas;
+
 
     private IAppInputSystem _appInputSystem;
 
@@ -33,7 +35,20 @@ public sealed class UIController : MonoBehaviour
         _shopPresenter.ClearPanels();
         _shopPresenter.gameObject.SetActive(false);
     }
-
+    public void OpenMainMenu()
+    {
+        _mainMenuPresenter.gameObject.SetActive(true);
+        _pauseMenuPresenter.gameObject.SetActive(false);
+        _appInputSystem.EscapeIsEnable = false;
+    }
+    public void CloseWinCanvas()
+    {
+        _winCanvas.gameObject.SetActive(false);
+    }
+    public void ShowWinCanvas()
+    {
+        _winCanvas.gameObject.SetActive(true);
+    }
     private void OnEscapePressed()
     {
         Debug.Log("Это надо переписать");

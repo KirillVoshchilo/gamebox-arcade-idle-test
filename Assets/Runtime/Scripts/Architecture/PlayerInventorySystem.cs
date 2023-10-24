@@ -19,6 +19,10 @@ public sealed class PlayerInventorySystem
         }
     }
 
+    public void Clear()
+    {
+        _inventory.Clear();
+    }
     public int GetCount(string name)
     {
         if (_inventory.TryGetValue(name, out int value))

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -16,12 +17,15 @@ public class ShopPresenter : MonoBehaviour
     private readonly Dictionary<string, ItemCost> _itemsCost = new();
     private IconsConfiguration _iconsConfiguration;
     private Key _selectedProduct;
+    private Configuration _configurations;
     private PlayerInventorySystem _playerInventorySystem;
 
     [Inject]
     public void Construct(IconsConfiguration iconsConfiguration,
-        PlayerInventorySystem playerInventorySystem)
+        PlayerInventorySystem playerInventorySystem,
+        Configuration configuration)
     {
+        _configurations = configuration;
         _playerInventorySystem = playerInventorySystem;
         _buyButton.onClick.AddListener(OnBuyButtonPressed);
         _iconsConfiguration = iconsConfiguration;
@@ -74,7 +78,7 @@ public class ShopPresenter : MonoBehaviour
     }
     private bool CheckProductForEvaluable(Key key)
     {
-        if (_playerInventorySystem.GetCount(key.Value) > 0)
+        if (_playerInventorySystem.GetCount(key.Value) > 0 && _configurations.ItemsOptions.Singletone.Contains(key))
             return false;
         foreach (ItemCount itemCount in _itemsCost[key.Value].Cost)
         {

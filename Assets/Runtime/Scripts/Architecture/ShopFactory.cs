@@ -9,6 +9,10 @@ public class ShopFactory : AScriptableFactory
     private UIController _uiController;
     private WorldCanvasStorage _worldCanvasStorage;
     private IAppInputSystem _appInputSystem;
+    private readonly SEvent<ShopEntity> _onCreated = new();
+
+    public SEvent<ShopEntity> OnCreated
+        => _onCreated;
 
     [Inject]
     public void Construct(IAppInputSystem appInputSystem,
@@ -21,8 +25,10 @@ public class ShopFactory : AScriptableFactory
     }
     public override void Create()
     {
-        ShopEntity entity = Instantiate(_shop, Parent.position, Parent.rotation);
-        entity.Construct(_uiController, _worldCanvasStorage, _appInputSystem);
+        ShopEntity instance = Instantiate(_shop, Parent.position, Parent.rotation);
+        instance.gameObject.name = _shop.name;
+        instance.Construct(_uiController, _worldCanvasStorage, _appInputSystem);
+        _onCreated.Invoke(instance);
     }
     public override void Remove(GameObject obj)
     {
