@@ -1,4 +1,3 @@
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -10,13 +9,5 @@ public sealed class RootScope : LifetimeScope
             .As<IAppInputSystem>();
         builder.Register<PlayerInventorySystem>(Lifetime.Singleton)
             .AsSelf();
-
-        Debug.Log("Зарегистрировал RootScope");
-        builder.RegisterBuildCallback(OnRegistrationEnded);
-    }
-
-    private void OnRegistrationEnded(IObjectResolver resolver)
-    {
-
     }
 }

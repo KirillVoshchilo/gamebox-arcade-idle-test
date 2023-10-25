@@ -5,19 +5,17 @@ using System;
 using VContainer;
 using VContainer.Unity;
 
-public class LevelLoader
+public sealed class LevelLoaderSystem
 {
     public const string MAIN_SCENE = "StartScene";
     public const string FIRST_LEVEL = "FIrstScene";
 
-    private LifetimeScope _container;
+    private readonly LifetimeScope _container;
     private LevelStorage _currentLoadedLevel;
 
     [Inject]
-    public void Construct(LifetimeScope lifetimeScope)
-    {
-        _container = lifetimeScope;
-    }
+    public LevelLoaderSystem(LifetimeScope lifetimeScope)
+        => _container = lifetimeScope;
 
     public async UniTask LoadScene(string scene, Action<LevelStorage> onComplete)
     {

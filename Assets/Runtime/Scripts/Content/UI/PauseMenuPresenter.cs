@@ -11,11 +11,11 @@ public class PauseMenuPresenter : MonoBehaviour
     private UIController _uiController;
     private PlayerInventorySystem _playerInventorySystem;
     private PlayerEntity _playerEntity;
-    private LevelLoader _levelLoader;
+    private LevelLoaderSystem _levelLoader;
 
     [Inject]
     public void Construct(IAppInputSystem appInputSystem,
-        LevelLoader levelLoader,
+        LevelLoaderSystem levelLoader,
         PlayerEntity playerEntity,
         PlayerInventorySystem playerInventorySystem,
         UIController uiController)
@@ -38,7 +38,7 @@ public class PauseMenuPresenter : MonoBehaviour
     {
         _playerInventorySystem.Clear();
         _playerEntity.GetComponent<Rigidbody>().useGravity = false;
-        _levelLoader.UnloadScene(LevelLoader.FIRST_LEVEL);
+        _levelLoader.UnloadScene(LevelLoaderSystem.FIRST_LEVEL);
         _uiController.OpenMainMenu();
         _uiController.CloseWinCanvas();
     }

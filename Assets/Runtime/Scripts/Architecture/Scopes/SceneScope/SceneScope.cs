@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
-public class ScScope : LifetimeScope
+public sealed class SceneScope : LifetimeScope
 {
     [SerializeField] private PlayerEntity _playerEntity;
     [SerializeField] private CamerasStorage _camerasStorage;
@@ -16,7 +14,6 @@ public class ScScope : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        Debug.Log("Сконфигурировал SceneScope");
         DontDestroyOnLoad(this.gameObject);
         _iconsConfiguration.Construct();
         builder.RegisterComponent(_iconsConfiguration);
@@ -25,9 +22,8 @@ public class ScScope : LifetimeScope
         builder.RegisterComponent(_playerEntity);
         builder.RegisterComponent(_uiController);
         builder.RegisterComponent(_camerasStorage);
-        builder.Register<LevelLoader>(Lifetime.Singleton)
+        builder.Register<LevelLoaderSystem>(Lifetime.Singleton)
             .AsSelf();
-
         builder.RegisterBuildCallback((container) =>
         {
             IAppInputSystem appInputSystem = container.Resolve<IAppInputSystem>();

@@ -14,14 +14,14 @@ public class MainMenuPresenter : MonoBehaviour
     [SerializeField] private GameObject _descriptionPanel;
 
     private IAppInputSystem _appInputSystem;
-    private LevelLoader _levelLoader;
+    private LevelLoaderSystem _levelLoader;
     private Configuration _configuration;
     private PlayerInventorySystem _playerInventorySystem;
     private PlayerEntity _playerEntity;
 
     [Inject]
     public void Construct(IAppInputSystem appInputSystem,
-        LevelLoader levelLoader,
+        LevelLoaderSystem levelLoader,
         PlayerEntity playerEntity,
         PlayerInventorySystem playerInventorySystem,
         Configuration configuration)
@@ -46,7 +46,7 @@ public class MainMenuPresenter : MonoBehaviour
 
     private void OnStartNewGameButton()
     {
-        _levelLoader.LoadScene(LevelLoader.FIRST_LEVEL, OnCompleteLoading)
+        _levelLoader.LoadScene(LevelLoaderSystem.FIRST_LEVEL, OnCompleteLoading)
             .Forget();
         int count = _configuration.StartInventoryConfiguration.Items.Length;
         for (int i = 0; i < count; i++)
