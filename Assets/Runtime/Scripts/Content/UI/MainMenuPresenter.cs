@@ -57,6 +57,7 @@ public class MainMenuPresenter : MonoBehaviour
         }
         _playerEntity.GetComponent<Rigidbody>().useGravity = true;
         _appInputSystem.EscapeIsEnable = true;
+        _appInputSystem.InventoryIsEnable = true;
         _appInputSystem.PlayerMovingIsEnable = true;
         gameObject.SetActive(false);
     }

@@ -25,9 +25,10 @@ public class ShopFactory : AScriptableFactory
     }
     public override void Create()
     {
-        ShopEntity instance = Instantiate(_shop, Parent.position, Parent.rotation);
+        ShopEntity instance = Instantiate(_shop, Parent.position, Parent.rotation, Parent);
         instance.gameObject.name = _shop.name;
         instance.Construct(_uiController, _worldCanvasStorage, _appInputSystem);
+        instance.transform.parent = null;
         _onCreated.Invoke(instance);
     }
     public override void Remove(GameObject obj)

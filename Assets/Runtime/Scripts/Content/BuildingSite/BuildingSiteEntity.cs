@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using VContainer;
 
-public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
+public sealed class BuildingSiteEntity : MonoBehaviour, IEntity, IDestructable
 {
     [SerializeField] private InteractionRequirements _buildRequirements;
     [SerializeField] private InteractableComp _interactableComp;
@@ -83,4 +83,12 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity
             return _interactableComp as T;
         return null;
     }
+
+    public void Destruct()
+    {
+        Debug.Log("освободил BuildingSiteEntity");
+        _interactableComp.OnEnable.ClearListeners();
+        _interactableComp.OnPerformed.ClearListeners();
+    }
+
 }

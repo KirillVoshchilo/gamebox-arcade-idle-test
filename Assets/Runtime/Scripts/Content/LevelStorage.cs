@@ -38,6 +38,7 @@ public class LevelStorage : MonoBehaviour
             if (target != null) // Check missing reference
             {
                 _destructables.UnionWith(target.GetComponents<IDestructable>());
+                _destructables.UnionWith(target.GetComponentsInChildren<IDestructable>());
                 lifeTimeScope.Container.InjectGameObject(target);
             }
         }

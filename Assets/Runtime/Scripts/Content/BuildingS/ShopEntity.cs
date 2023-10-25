@@ -2,7 +2,7 @@
 using UnityEngine;
 using VContainer;
 
-public sealed class ShopEntity : MonoBehaviour, IEntity
+public sealed class ShopEntity : MonoBehaviour, IEntity, IDestructable
 {
     [SerializeField] private InteractableComp _interactableComp;
     [SerializeField] private ItemCost[] _priceList;
@@ -29,7 +29,11 @@ public sealed class ShopEntity : MonoBehaviour, IEntity
         return null;
     }
 
-    internal void Destruct() => throw new NotImplementedException();
+    public void Destruct()
+    {
+        _interactableComp.OnEnable.ClearListeners();
+        _interactableComp.OnPerformed.ClearListeners();
+    }
 
     private void OnEnabled(bool obj)
     {

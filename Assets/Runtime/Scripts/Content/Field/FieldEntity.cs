@@ -2,7 +2,7 @@
 using UnityEngine;
 using VContainer;
 
-public sealed class FieldEntity : MonoBehaviour, IEntity
+public sealed class FieldEntity : MonoBehaviour, IEntity, IDestructable
 {
     [SerializeField] private InteractableComp _interactableComp;
     [SerializeField] private Key _name;
@@ -88,5 +88,15 @@ public sealed class FieldEntity : MonoBehaviour, IEntity
         if (typeof(T) == typeof(InteractionRequirements))
             return _fieldData as T;
         return null;
+    }
+
+    public void Destruct()
+    {
+        Debug.Log("освободил FieldEntity");
+        _interactableComp.OnRecovered.ClearListeners();
+        _interactableComp.OnEnable.ClearListeners();
+        _interactableComp.OnStarted.ClearListeners();
+        _interactableComp.OnCancel.ClearListeners();
+        _interactableComp.OnPerformed.ClearListeners();
     }
 }

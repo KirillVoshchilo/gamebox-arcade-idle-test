@@ -23,9 +23,9 @@ public class LevelLoader
     {
         SceneManager.LoadScene(scene, LoadSceneMode.Additive);
         await UniTask.Yield();
-        LevelStorage levelStorage = GameObject.FindAnyObjectByType<LevelStorage>();
-        levelStorage.Construct(_container);
-        onComplete?.Invoke(levelStorage);
+        _currentLoadedLevel = GameObject.FindAnyObjectByType<LevelStorage>();
+        _currentLoadedLevel.Construct(_container);
+        onComplete?.Invoke(_currentLoadedLevel);
     }
     public void UnloadScene(string scene)
     {

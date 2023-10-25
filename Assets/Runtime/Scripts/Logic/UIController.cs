@@ -31,7 +31,7 @@ public sealed class UIController : MonoBehaviour
     {
         _appInputSystem.InventoryIsEnable = true;
         _appInputSystem.PlayerMovingIsEnable = true;
-        _appInputSystem.EscapeIsEnable = false;
+        _appInputSystem.EscapeIsEnable = true;
         _shopPresenter.ClearPanels();
         _shopPresenter.gameObject.SetActive(false);
     }
