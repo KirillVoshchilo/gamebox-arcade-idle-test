@@ -13,7 +13,6 @@ public sealed class SceneScope : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        DontDestroyOnLoad(gameObject);
         _configuration.Construct();
         builder.RegisterComponent(_configuration);
         builder.RegisterComponent(_worldCanvasStorage);

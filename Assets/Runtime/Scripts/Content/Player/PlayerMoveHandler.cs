@@ -47,14 +47,14 @@ public sealed class PlayerMoveHandler
         MoveProcess()
             .Forget();
     }
-    private void StopMove() 
+    private void StopMove()
         => _isMoving = false;
     private async UniTask MoveProcess()
     {
         while (_isMoving && _isEnable)
         {
             Move();
-            await UniTask.NextFrame();
+            await UniTask.DelayFrame(1);
         }
         _isMoving = false;
     }
@@ -62,8 +62,11 @@ public sealed class PlayerMoveHandler
     {
         Vector3 target = _transform.position;
         Vector3 forwarDirection = _cameraTransform.forward - (Vector3.up * Vector3.Dot(_cameraTransform.forward, Vector3.up));
-        target += _appInputSystem.MoveDirection.x * _speed * Time.deltaTime * _cameraTransform.right;
-        target += _appInputSystem.MoveDirection.y * _speed * Time.deltaTime * forwarDirection;
+        target += _appInputSystem.MoveDirection.x * _speed * _cameraTransform.right;
+        target += _appInputSystem.MoveDirection.y * _speed * forwarDirection.normalized;
+        Debug.Log($"_speed: {_speed} _appInputSystem.MoveDirection.x: {_appInputSystem.MoveDirection.x} _appInputSystem.MoveDirection.y: {_appInputSystem.MoveDirection.y}" +
+            $"Time.deltaTime: {Time.deltaTime}");
+        Debug.Log($"");
         _rigidbody.MovePosition(target);
     }
 }
