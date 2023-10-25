@@ -249,7 +249,7 @@ MonoBehaviour:
     _iconTransform: {fileID: 6998585607843009409}
     _interactTime: 1
     _recoverTime: 5
-  _name: {fileID: 11400000, guid: 8cb786425129ec54496f5ab38651c247, type: 2}
+  _key: {fileID: 11400000, guid: 8cb786425129ec54496f5ab38651c247, type: 2}
   _itemsCount: 1
   _crystal: {fileID: 543565968862324057}
   _fieldData:

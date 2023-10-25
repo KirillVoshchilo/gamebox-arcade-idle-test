@@ -1,11 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-public class MainMenuPresenter : MonoBehaviour
+public sealed class MainMenuPresenter : MonoBehaviour
 {
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _closeAppButton;
@@ -43,7 +41,6 @@ public class MainMenuPresenter : MonoBehaviour
         => _descriptionPanel.SetActive(true);
     private void OnCloseDescriptionClicked()
         => _descriptionPanel.SetActive(false);
-
     private void OnStartNewGameButton()
     {
         _levelLoader.LoadScene(LevelLoaderSystem.FIRST_LEVEL, OnCompleteLoading)
@@ -51,9 +48,9 @@ public class MainMenuPresenter : MonoBehaviour
         int count = _configuration.StartInventoryConfiguration.Items.Length;
         for (int i = 0; i < count; i++)
         {
-            string name = _configuration.StartInventoryConfiguration.Items[i].Key.Value;
+            Key key = _configuration.StartInventoryConfiguration.Items[i].Key;
             int quantity = _configuration.StartInventoryConfiguration.Items[i].Count;
-            _playerInventorySystem.AddItem(name, quantity);
+            _playerInventorySystem.AddItem(key, quantity);
         }
         _playerEntity.GetComponent<Rigidbody>().useGravity = true;
         _appInputSystem.EscapeIsEnable = true;
@@ -61,11 +58,8 @@ public class MainMenuPresenter : MonoBehaviour
         _appInputSystem.PlayerMovingIsEnable = true;
         gameObject.SetActive(false);
     }
-
     private void OnCompleteLoading(LevelStorage storage)
-    {
-        _playerEntity.transform.position = storage.PlayerTransform.position;
-    }
+        => _playerEntity.transform.position = storage.PlayerTransform.position;
     private void OnCloseAppClicked()
         => Application.Quit();
 }

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using VContainer;
 
-public class PauseMenuPresenter : MonoBehaviour
+public sealed class PauseMenuPresenter : MonoBehaviour
 {
     [SerializeField] private Button _continueButton;
     [SerializeField] private Button _closeAppButton;

@@ -5,10 +5,10 @@ using VContainer;
 public sealed class FieldEntity : MonoBehaviour, IEntity, IDestructable
 {
     [SerializeField] private InteractableComp _interactableComp;
-    [SerializeField] private Key _name;
+    [SerializeField] private Key _key;
     [SerializeField] private int _itemsCount;
     [SerializeField] private GameObject _crystal;
-    [SerializeField] private InteractionRequirements _fieldData;
+    [SerializeField] private InteractionRequirementsComp _fieldData;
 
     private PlayerInventorySystem _playerInventory;
     private WorldCanvasStorage _worldCanvasStorage;
@@ -19,13 +19,28 @@ public sealed class FieldEntity : MonoBehaviour, IEntity, IDestructable
         WorldCanvasStorage worldCanvasStorage,
         IAppInputSystem appInputSystem)
     {
-        Debug.Log("Сконструировал FieldEntity");
         _appInputSystem = appInputSystem;
         _interactableComp.Construct(appInputSystem);
         _playerInventory = playerInventorySystem;
         _worldCanvasStorage = worldCanvasStorage;
         _interactableComp.OnRecovered.AddListener(OnRecovered);
         _interactableComp.OnEnable.AddListener(OnEnabled);
+    }
+    public T Get<T>() where T : class
+    {
+        if (typeof(T) == typeof(InteractableComp))
+            return _interactableComp as T;
+        if (typeof(T) == typeof(InteractionRequirementsComp))
+            return _fieldData as T;
+        return null;
+    }
+    public void Destruct()
+    {
+        _interactableComp.OnRecovered.ClearListeners();
+        _interactableComp.OnEnable.ClearListeners();
+        _interactableComp.OnStarted.ClearListeners();
+        _interactableComp.OnCancel.ClearListeners();
+        _interactableComp.OnPerformed.ClearListeners();
     }
 
     private void OnRecovered(bool obj)
@@ -57,9 +72,8 @@ public sealed class FieldEntity : MonoBehaviour, IEntity, IDestructable
     private void OnPerformedInteraction()
     {
         _crystal.SetActive(false);
-        _playerInventory.AddItem(_name.Value, _itemsCount);
+        _playerInventory.AddItem(_key, _itemsCount);
     }
-
     private void OnCancelInteraction()
     {
         _worldCanvasStorage.InteractIcon.CloseProgress();
@@ -79,24 +93,5 @@ public sealed class FieldEntity : MonoBehaviour, IEntity, IDestructable
             _worldCanvasStorage.InteractIcon.SetProgress(_appInputSystem.InteractionPercentage);
             await UniTask.Delay(50);
         }
-    }
-
-    public T Get<T>() where T : class
-    {
-        if (typeof(T) == typeof(InteractableComp))
-            return _interactableComp as T;
-        if (typeof(T) == typeof(InteractionRequirements))
-            return _fieldData as T;
-        return null;
-    }
-
-    public void Destruct()
-    {
-        Debug.Log("освободил FieldEntity");
-        _interactableComp.OnRecovered.ClearListeners();
-        _interactableComp.OnEnable.ClearListeners();
-        _interactableComp.OnStarted.ClearListeners();
-        _interactableComp.OnCancel.ClearListeners();
-        _interactableComp.OnPerformed.ClearListeners();
     }
 }

@@ -7,16 +7,14 @@ public sealed class SceneScope : LifetimeScope
     [SerializeField] private PlayerEntity _playerEntity;
     [SerializeField] private CamerasStorage _camerasStorage;
     [SerializeField] private WorldCanvasStorage _worldCanvasStorage;
-    [SerializeField] private IconsConfiguration _iconsConfiguration;
     [SerializeField] private UIController _uiController;
     [SerializeField] private Configuration _configuration;
     [SerializeField] private ShopFactory[] _shopFactories;
 
     protected override void Configure(IContainerBuilder builder)
     {
-        DontDestroyOnLoad(this.gameObject);
-        _iconsConfiguration.Construct();
-        builder.RegisterComponent(_iconsConfiguration);
+        DontDestroyOnLoad(gameObject);
+        _configuration.Construct();
         builder.RegisterComponent(_configuration);
         builder.RegisterComponent(_worldCanvasStorage);
         builder.RegisterComponent(_playerEntity);

@@ -1,49 +1,44 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public sealed class PlayerInventorySystem
 {
-    private readonly Dictionary<string, int> _inventory = new();
-    private readonly SEvent<string, int> _onInventoryValueChanged = new();
+    private readonly Dictionary<Key, int> _inventory = new();
+    private readonly SEvent<Key, int> _onInventoryValueChanged = new();
 
-    public SEvent<string, int> OnInventoryValueChanged
+    public SEvent<Key, int> OnInventoryValueChanged
         => _onInventoryValueChanged;
-    public List<(string, int)> AllItems
+    public List<(Key, int)> AllItems
     {
         get
         {
-            List<(string name, int count)> items = new();
-            foreach (KeyValuePair<string, int> item in _inventory)
+            List<(Key name, int count)> items = new();
+            foreach (KeyValuePair<Key, int> item in _inventory)
                 items.Add((name: item.Key, count: item.Value));
             return items;
         }
     }
 
     public void Clear()
+        => _inventory.Clear();
+    public int GetCount(Key key)
     {
-        _inventory.Clear();
-    }
-    public int GetCount(string name)
-    {
-        if (_inventory.TryGetValue(name, out int value))
+        if (_inventory.TryGetValue(key, out int value))
             return value;
         return 0;
     }
-    public void AddItem(string name, int count)
+    public void AddItem(Key key, int count)
     {
-        if (_inventory.TryGetValue(name, out int value))
-            _inventory[name] = count + value;
-        else _inventory.Add(name, count);
-        _onInventoryValueChanged.Invoke(name, _inventory[name]);
-        Debug.Log($"В инвентаре стало {name}: {_inventory[name]}");
+        if (_inventory.TryGetValue(key, out int value))
+            _inventory[key] = count + value;
+        else _inventory.Add(key, count);
+        _onInventoryValueChanged.Invoke(key, _inventory[key]);
     }
-    public void RemoveItem(string name, int count)
+    public void RemoveItem(Key key, int count)
     {
-        if (_inventory.TryGetValue(name, out int value))
-            _inventory[name] = value - count;
-        else Debug.Log("Пытаешся отнять то, чего нет");
-        _onInventoryValueChanged.Invoke(name, _inventory[name]);
-        if (_inventory[name] == 0)
-            _inventory.Remove(name);
+        if (_inventory.TryGetValue(key, out int value))
+            _inventory[key] = value - count;
+        _onInventoryValueChanged.Invoke(key, _inventory[key]);
+        if (_inventory[key] == 0)
+            _inventory.Remove(key);
     }
 }

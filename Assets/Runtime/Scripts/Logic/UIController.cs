@@ -9,7 +9,6 @@ public sealed class UIController : MonoBehaviour
     [SerializeField] private PauseMenuPresenter _pauseMenuPresenter;
     [SerializeField] private GameObject _winCanvas;
 
-
     private IAppInputSystem _appInputSystem;
 
     [Inject]
@@ -42,16 +41,12 @@ public sealed class UIController : MonoBehaviour
         _appInputSystem.EscapeIsEnable = false;
     }
     public void CloseWinCanvas()
-    {
-        _winCanvas.gameObject.SetActive(false);
-    }
+        => _winCanvas.SetActive(false);
     public void ShowWinCanvas()
-    {
-        _winCanvas.gameObject.SetActive(true);
-    }
+        => _winCanvas.SetActive(true);
+
     private void OnEscapePressed()
     {
-        Debug.Log("Это надо переписать");
         if (_inventoryPresenter.gameObject.activeSelf)
         {
             CloseInventory();
@@ -65,7 +60,6 @@ public sealed class UIController : MonoBehaviour
         if (_pauseMenuPresenter.gameObject.activeSelf)
             ClosePausePanel();
         else OpenPausePanel();
-
     }
     private void OpenPausePanel()
     {

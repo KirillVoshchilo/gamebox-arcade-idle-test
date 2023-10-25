@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 624913678}
   - component: {fileID: 624913679}
   m_Layer: 0
-  m_Name: LevelScope
+  m_Name: LevelStorage
   m_TagString: LevelStorage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 624913677}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf1896288f0d9374c95ad549b90d64be, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a7ae2f192dc7d843a27f63e901be147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 803570679}

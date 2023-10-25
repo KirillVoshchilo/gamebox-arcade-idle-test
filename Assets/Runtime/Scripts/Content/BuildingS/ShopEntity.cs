@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using VContainer;
 
 public sealed class ShopEntity : MonoBehaviour, IEntity, IDestructable
@@ -16,7 +15,6 @@ public sealed class ShopEntity : MonoBehaviour, IEntity, IDestructable
         IAppInputSystem appInputSystem)
     {
         _uiController = uiController;
-        Debug.Log("Сконструировал ShopEntity");
         _interactableComp.Construct(appInputSystem);
         _worldCanvasStorage = worldCanvasStorage;
         _interactableComp.OnEnable.AddListener(OnEnabled);
@@ -28,7 +26,6 @@ public sealed class ShopEntity : MonoBehaviour, IEntity, IDestructable
             return _interactableComp as T;
         return null;
     }
-
     public void Destruct()
     {
         _interactableComp.OnEnable.ClearListeners();

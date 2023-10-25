@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class TriggerComponent : MonoBehaviour
@@ -13,11 +11,7 @@ public sealed class TriggerComponent : MonoBehaviour
         => _onExit;
 
     private void OnTriggerEnter(Collider other)
-    {
-        _onEnter.Invoke(other);
-    }
+        => _onEnter.Invoke(other);
     private void OnTriggerExit(Collider other)
-    {
-        _onExit.Invoke(other);
-    }
+        => _onExit.Invoke(other);
 }
