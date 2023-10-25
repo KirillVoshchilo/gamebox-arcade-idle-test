@@ -60,6 +60,8 @@ public sealed class BuildingSiteEntity : MonoBehaviour, IEntity, IDestructable
     }
     private void OnPerformedInteraction()
     {
+        if (!CheckRequirement())
+            return;
         foreach (ItemCount item in _buildRequirements.Requirements)
             _playerInventory.RemoveItem(item.Key, item.Count);
         _buildingFactory.Parent = _builderTransform;

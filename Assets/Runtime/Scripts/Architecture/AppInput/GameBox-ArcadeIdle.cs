@@ -51,7 +51,7 @@ public partial class @GameBoxArcadeIdle: IInputActionCollection2, IDisposable
                     ""id"": ""cf706c35-9481-4bd8-ac69-5b7e885b9108"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Hold(duration=1.401298E-45,pressPoint=1.401298E-45)"",
                     ""initialStateCheck"": false
                 },
                 {

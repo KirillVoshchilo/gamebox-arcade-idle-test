@@ -54,7 +54,10 @@ public sealed class PlayerEntity : MonoBehaviour, IEntity
                     Key key = interactionRequirements.Requirements[i].Key;
                     int quantity = _playerInventorySystem.GetCount(key);
                     if (quantity < interactionRequirements.Requirements[i].Count)
+                    {
+                        interactableComp.IsValid = false;
                         return;
+                    }    
                 }
             }
             if (_interactEntity != null)

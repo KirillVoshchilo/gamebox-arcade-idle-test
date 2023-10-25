@@ -31,6 +31,8 @@ public sealed class PauseMenuPresenter : MonoBehaviour
 
     private void OnContinueClicked()
     {
+        _appInputSystem.EscapeIsEnable = true;
+        _appInputSystem.InventoryIsEnable = true;
         _appInputSystem.PlayerMovingIsEnable = true;
         gameObject.SetActive(false);
     }
