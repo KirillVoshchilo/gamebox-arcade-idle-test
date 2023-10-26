@@ -60,6 +60,7 @@ namespace App.Content.Field
                 _worldCanvasStorage.InteractIcon.gameObject.SetActive(true);
                 _worldCanvasStorage.InteractIcon.IsEnable = true;
                 _worldCanvasStorage.InteractIcon.OpenTip();
+                _worldCanvasStorage.InteractIcon.HoldMode = true;
                 _interactableComp.OnStarted.AddListener(OnStartedInteracrtion);
                 _interactableComp.OnCancel.AddListener(OnCancelInteraction);
                 _interactableComp.OnPerformed.AddListener(OnPerformedInteraction);
@@ -85,6 +86,7 @@ namespace App.Content.Field
         {
             _worldCanvasStorage.InteractIcon.CloseProgress();
             _worldCanvasStorage.InteractIcon.OpenTip();
+            _worldCanvasStorage.InteractIcon.HoldMode = true;
         }
         private void OnStartedInteracrtion()
         {

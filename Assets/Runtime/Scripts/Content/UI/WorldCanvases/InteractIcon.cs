@@ -1,5 +1,6 @@
 using App.Logic;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -9,6 +10,8 @@ namespace App.Content.UI.WorldCanvases
     public sealed class InteractIcon : MonoBehaviour
     {
         [SerializeField] private GameObject _buttonTip;
+        [SerializeField] private TextMeshProUGUI _pressEText;
+        [SerializeField] private TextMeshProUGUI _holdEText;
         [SerializeField] private GameObject _progressBar;
         [SerializeField] private Image _progressImage;
         [SerializeField] private Canvas _canvas;
@@ -29,6 +32,22 @@ namespace App.Content.UI.WorldCanvases
                 }
             }
         }
+        public bool HoldMode
+        {
+            set
+            {
+                if (value)
+                {
+                    _holdEText.gameObject.SetActive(true);
+                    _pressEText.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _holdEText.gameObject.SetActive(false);
+                    _pressEText.gameObject.SetActive(true);
+                }
+            }
+        }
 
         [Inject]
         public void Construct(CamerasStorage camerasStorage)
@@ -36,6 +55,7 @@ namespace App.Content.UI.WorldCanvases
             _canvas.worldCamera = camerasStorage.MainCamera;
             _mainCameraTransform = camerasStorage.MainCamera.transform;
         }
+
         public void SetPosition(Vector3 position)
             => transform.position = position;
         public void OpenTip()

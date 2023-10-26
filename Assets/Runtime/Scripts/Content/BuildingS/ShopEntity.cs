@@ -47,6 +47,7 @@ namespace App.Content.Buildings
                 _worldCanvasStorage.InteractIcon.gameObject.SetActive(true);
                 _worldCanvasStorage.InteractIcon.IsEnable = true;
                 _worldCanvasStorage.InteractIcon.OpenTip();
+                _worldCanvasStorage.InteractIcon.HoldMode = false;
             }
             else
             {
