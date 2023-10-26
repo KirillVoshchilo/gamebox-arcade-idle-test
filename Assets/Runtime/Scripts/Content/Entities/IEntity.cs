@@ -1,4 +1,7 @@
-﻿public interface IEntity
+﻿namespace App.Content.Entities
 {
-    T Get<T>() where T : class;
+    public interface IEntity
+    {
+        T Get<T>() where T : class;
+    }
 }

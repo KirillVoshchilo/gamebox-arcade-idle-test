@@ -1,14 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public sealed class ItemCost
+namespace App.Architecture.AppData
 {
-    [SerializeField] private Key _key;
-    [SerializeField] private ItemCount[] _cost;
+    [Serializable]
+    public sealed class ItemCost
+    {
+        [SerializeField] private Key _key;
+        [SerializeField] private ItemCount[] _cost;
 
-    public Key Key 
-        => _key; 
-    public ItemCount[] Cost 
-        => _cost; 
+        public Key Key
+            => _key;
+        public ItemCount[] Cost
+            => _cost;
+    }
 }

@@ -1,4 +1,7 @@
-﻿public interface IDestructable
+﻿namespace App.Architecture.AppData
 {
-    public void Destruct();
+    public interface IDestructable
+    {
+        public void Destruct();
+    }
 }

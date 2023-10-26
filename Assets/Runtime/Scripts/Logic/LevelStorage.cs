@@ -1,37 +1,41 @@
+using App.Architecture.AppData;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer.Unity;
 
-public sealed class LevelStorage : MonoBehaviour
+namespace App.Logic
 {
-    [SerializeField] private Transform _playerTransform;
-    [SerializeField] private GameObject[] _autoInjectObjects;
-
-    private readonly HashSet<IDestructable> _destructables = new();
-
-
-    public Transform PlayerTransform
-        => _playerTransform;
-
-    public void Construct(LifetimeScope lifeTimeScope)
-        => AutoInjectAll(lifeTimeScope);
-    public void Destruct()
+    public sealed class LevelStorage : MonoBehaviour
     {
-        foreach (IDestructable destructable in _destructables)
-            destructable.Destruct();
-    }
+        [SerializeField] private Transform _playerTransform;
+        [SerializeField] private GameObject[] _autoInjectObjects;
 
-    private void AutoInjectAll(LifetimeScope lifeTimeScope)
-    {
-        if (_autoInjectObjects == null)
-            return;
-        foreach (GameObject target in _autoInjectObjects)
+        private readonly HashSet<IDestructable> _destructables = new();
+
+
+        public Transform PlayerTransform
+            => _playerTransform;
+
+        public void Construct(LifetimeScope lifeTimeScope)
+            => AutoInjectAll(lifeTimeScope);
+        public void Destruct()
         {
-            if (target != null)
+            foreach (IDestructable destructable in _destructables)
+                destructable.Destruct();
+        }
+
+        private void AutoInjectAll(LifetimeScope lifeTimeScope)
+        {
+            if (_autoInjectObjects == null)
+                return;
+            foreach (GameObject target in _autoInjectObjects)
             {
-                _destructables.UnionWith(target.GetComponents<IDestructable>());
-                _destructables.UnionWith(target.GetComponentsInChildren<IDestructable>());
-                lifeTimeScope.Container.InjectGameObject(target);
+                if (target != null)
+                {
+                    _destructables.UnionWith(target.GetComponents<IDestructable>());
+                    _destructables.UnionWith(target.GetComponentsInChildren<IDestructable>());
+                    lifeTimeScope.Container.InjectGameObject(target);
+                }
             }
         }
     }

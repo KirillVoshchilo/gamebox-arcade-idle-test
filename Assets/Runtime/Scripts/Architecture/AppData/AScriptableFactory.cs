@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public abstract class AScriptableFactory : ScriptableObject
+namespace App.Architecture.AppData
 {
-    private Transform _parent;
-
-    public Transform Parent
+    public abstract class AScriptableFactory : ScriptableObject
     {
-        get => _parent;
-        set => _parent = value;
-    }
+        private Transform _parent;
 
-    public abstract void Create();
-    public abstract void Remove(GameObject obj);
+        public Transform Parent
+        {
+            get => _parent;
+            set => _parent = value;
+        }
+
+        public abstract void Create();
+        public abstract void Remove(GameObject obj);
+    }
 }

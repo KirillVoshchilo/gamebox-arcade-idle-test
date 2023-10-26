@@ -1,11 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public sealed class ItemsOptions
+namespace App.Architecture.AppData
 {
-    [SerializeField] private Key[] _singletones;
+    [Serializable]
+    public sealed class ItemsOptions
+    {
+        [SerializeField] private Key[] _singletones;
 
-    public Key[] Singletone
-        => _singletones;
+        public Key[] Singletone
+            => _singletones;
+    }
 }

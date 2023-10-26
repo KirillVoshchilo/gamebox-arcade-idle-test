@@ -2,19 +2,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public sealed class IconsConfiguration
+namespace App.Architecture.AppData
 {
-    [SerializeField] private Icon[] _icons;
-
-    private readonly Dictionary<Key, Icon> _iconsDictionary = new();
-
-    public Sprite this[Key value]
-        => _iconsDictionary[value].Value;
-
-    public void Construct()
+    [Serializable]
+    public sealed class IconsConfiguration
     {
-        foreach (Icon icon in _icons)
-            _iconsDictionary.Add(icon.Name, icon);
+        [SerializeField] private Icon[] _icons;
+
+        private readonly Dictionary<Key, Icon> _iconsDictionary = new();
+
+        public Sprite this[Key value]
+            => _iconsDictionary[value].Value;
+
+        public void Construct()
+        {
+            foreach (Icon icon in _icons)
+                _iconsDictionary.Add(icon.Name, icon);
+        }
     }
 }

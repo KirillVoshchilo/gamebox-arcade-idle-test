@@ -1,14 +1,17 @@
-using UnityEngine;
+using App.Architecture.AppInput;
 using VContainer;
 using VContainer.Unity;
 
-public sealed class RootScope : LifetimeScope
+namespace App.Architecture.Scopes
 {
-    protected override void Configure(IContainerBuilder builder)
+    public sealed class RootScope : LifetimeScope
     {
-        builder.Register<AppInputSystem>(Lifetime.Singleton)
-            .As<IAppInputSystem>();
-        builder.Register<PlayerInventorySystem>(Lifetime.Singleton)
-            .AsSelf();
+        protected override void Configure(IContainerBuilder builder)
+        {
+            builder.Register<AppInputSystem>(Lifetime.Singleton)
+                .As<IAppInputSystem>();
+            builder.Register<PlayerInventorySystem>(Lifetime.Singleton)
+                .AsSelf();
+        }
     }
 }

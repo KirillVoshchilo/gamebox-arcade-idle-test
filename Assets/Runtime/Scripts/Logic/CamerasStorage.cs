@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public sealed class CamerasStorage : MonoBehaviour
+namespace App.Logic
 {
-    [SerializeField] private Camera _mainCamera;
+    public sealed class CamerasStorage : MonoBehaviour
+    {
+        [SerializeField] private Camera _mainCamera;
 
-    public Camera MainCamera
-        => _mainCamera;
+        public Camera MainCamera
+            => _mainCamera;
+    }
 }

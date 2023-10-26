@@ -1,40 +1,45 @@
+using App.Architecture;
+using App.Architecture.AppData;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-public sealed class InventoryPresenter : MonoBehaviour
+namespace App.Content.UI.Inventory
 {
-    [SerializeField] private InventoryItemPresenter _prefab;
-    [SerializeField] private Transform _content;
-
-    private readonly List<InventoryItemPresenter> _itemsList = new();
-    private PlayerInventorySystem _playerInventorySystem;
-    private IconsConfiguration _iconsConfiguration;
-
-    [Inject]
-    public void Construct(PlayerInventorySystem playerInventorySystem,
-        Configuration configurations)
+    public sealed class InventoryPresenter : MonoBehaviour
     {
-        _playerInventorySystem = playerInventorySystem;
-        _iconsConfiguration = configurations.IconsConfiguration;
-    }
-    public void FillWithItems()
-    {
-        foreach ((Key name, int count) item in _playerInventorySystem.AllItems)
+        [SerializeField] private InventoryItemPresenter _prefab;
+        [SerializeField] private Transform _content;
+
+        private readonly List<InventoryItemPresenter> _itemsList = new();
+        private PlayerInventorySystem _playerInventorySystem;
+        private IconsConfiguration _iconsConfiguration;
+
+        [Inject]
+        public void Construct(PlayerInventorySystem playerInventorySystem,
+            Configuration configurations)
         {
-            InventoryItemPresenter presenter = Instantiate(_prefab, _content);
-            presenter.Count = item.count;
-            presenter.Name = item.name.Value;
-            presenter.Icon = _iconsConfiguration[item.name];
-            _itemsList.Add(presenter);
+            _playerInventorySystem = playerInventorySystem;
+            _iconsConfiguration = configurations.IconsConfiguration;
         }
-    }
-    public void Clear()
-    {
-        InventoryItemPresenter[] array = _itemsList.ToArray();
-        int count = array.Length;
-        for (int i = 0; i < count; i++)
-            Destroy(array[i].gameObject);
-        _itemsList.Clear();
+        public void FillWithItems()
+        {
+            foreach ((Key name, int count) item in _playerInventorySystem.AllItems)
+            {
+                InventoryItemPresenter presenter = Instantiate(_prefab, _content);
+                presenter.Count = item.count;
+                presenter.Name = item.name.Value;
+                presenter.Icon = _iconsConfiguration[item.name];
+                _itemsList.Add(presenter);
+            }
+        }
+        public void Clear()
+        {
+            InventoryItemPresenter[] array = _itemsList.ToArray();
+            int count = array.Length;
+            for (int i = 0; i < count; i++)
+                Destroy(array[i].gameObject);
+            _itemsList.Clear();
+        }
     }
 }
