@@ -1,22 +1,12 @@
-﻿using App.Architecture.AppInput;
-using App.Logic;
-using Cysharp.Threading.Tasks;
-using System;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace App.Content.Entities
 {
-    [Serializable]
     public sealed class PlayerMoveHandler
     {
-        [SerializeField] private float _speed;
-        [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private Transform _transform;
-
-        private IAppInputSystem _appInputSystem;
-        private Transform _cameraTransform;
+        private readonly PlayerData _playerData;
         private bool _isEnable;
-        private bool _isMoving;
 
         public bool IsEnable
         {
@@ -26,49 +16,49 @@ namespace App.Content.Entities
                 _isEnable = value;
                 if (value)
                 {
-                    _appInputSystem.OnMovingStarted.AddListener(StartMove);
-                    _appInputSystem.OnMovingStoped.AddListener(StopMove);
+                    _playerData.AppInputSystem.OnMovingStarted.AddListener(StartMove);
+                    _playerData.AppInputSystem.OnMovingStoped.AddListener(StopMove);
                 }
                 else
                 {
-                    _appInputSystem.OnMovingStarted.RemoveListener(StartMove);
-                    _appInputSystem.OnMovingStoped.RemoveListener(StopMove);
+                    _playerData.AppInputSystem.OnMovingStarted.RemoveListener(StartMove);
+                    _playerData.AppInputSystem.OnMovingStoped.RemoveListener(StopMove);
                     StopMove();
                 }
             }
         }
 
-        public void Construct(IAppInputSystem appInputSystem,
-            CamerasStorage camerasStorage)
+        public PlayerMoveHandler(PlayerData playerBlackboard)
         {
-            _cameraTransform = camerasStorage.MainCamera.transform;
-            _appInputSystem = appInputSystem;
+            _playerData = playerBlackboard;
+            _playerData.IsMoving = false;
+            _playerData.MovingSpeed = _playerData.DefaultMovingSpeed;
         }
 
         private void StartMove()
         {
-            _isMoving = true;
+            _playerData.IsMoving = true;
             MoveProcess()
                 .Forget();
         }
         private void StopMove()
-            => _isMoving = false;
+            => _playerData.IsMoving = false;
         private async UniTask MoveProcess()
         {
-            while (_isMoving && _isEnable)
+            while (_playerData.IsMoving && _isEnable)
             {
                 Move();
                 await UniTask.DelayFrame(1);
             }
-            _isMoving = false;
+            _playerData.IsMoving = false;
         }
         private void Move()
         {
-            Vector3 target = _transform.position;
-            Vector3 forwarDirection = _cameraTransform.forward - (Vector3.up * Vector3.Dot(_cameraTransform.forward, Vector3.up));
-            target += _appInputSystem.MoveDirection.x * _speed * _cameraTransform.right;
-            target += _appInputSystem.MoveDirection.y * _speed * forwarDirection.normalized;
-            _rigidbody.MovePosition(target);
+            Vector3 target = _playerData.Transform.position;
+            Vector3 forwarDirection = _playerData.MainCameraTransform.forward - (Vector3.up * Vector3.Dot(_playerData.MainCameraTransform.forward, Vector3.up));
+            target += _playerData.AppInputSystem.MoveDirection.x * _playerData.MovingSpeed * _playerData.MainCameraTransform.right;
+            target += _playerData.AppInputSystem.MoveDirection.y * _playerData.MovingSpeed * forwarDirection.normalized;
+            _playerData.Rigidbody.MovePosition(target);
         }
     }
 }

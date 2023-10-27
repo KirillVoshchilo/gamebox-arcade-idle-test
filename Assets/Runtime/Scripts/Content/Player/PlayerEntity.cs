@@ -1,7 +1,6 @@
 ﻿using App.Architecture;
 using App.Architecture.AppData;
 using App.Architecture.AppInput;
-using App.Components;
 using App.Content.Entities;
 using App.Logic;
 using UnityEngine;
@@ -11,22 +10,47 @@ namespace App.Content.Player
 {
     public sealed class PlayerEntity : MonoBehaviour, IEntity
     {
-        [SerializeField] private PlayerMoveHandler _moveHandler;
-        [SerializeField] private TriggerComponent _triggerComponent;
+        [SerializeField] private PlayerData _playerData;
 
-        private InteractableComp _interactEntity;
+        private PlayerMoveHandler _moveHandler;
         private PlayerInventorySystem _playerInventorySystem;
+        private bool _isEnable;
+
+        public bool IsEnable
+        {
+            get => _isEnable;
+            set
+            {
+                _isEnable = value;
+                if (value)
+                {
+                    _playerData.TriggerComponent.OnExit.AddListener(OnExitEntity);
+                    _playerData.TriggerComponent.OnEnter.AddListener(OnEnterEntity);
+                    _moveHandler.IsEnable = true;
+                }
+                else
+                {
+                    _playerData.TriggerComponent.OnExit.ClearListeners();
+                    _playerData.TriggerComponent.OnEnter.ClearListeners();
+                    _moveHandler.IsEnable = true;
+                }
+            }
+        }
 
         [Inject]
         public void Construct(IAppInputSystem appInputSystem,
             CamerasStorage camerasStorage,
             PlayerInventorySystem playerInventorySystem)
         {
+            _playerData.AppInputSystem = appInputSystem;
+            _playerData.MainCameraTransform = camerasStorage.MainCamera.transform;
             _playerInventorySystem = playerInventorySystem;
-            _moveHandler.Construct(appInputSystem, camerasStorage);
-            _moveHandler.IsEnable = true;
-            _triggerComponent.OnExit.AddListener(OnExitEntity);
-            _triggerComponent.OnEnter.AddListener(OnEnterEntity);
+            _moveHandler = new PlayerMoveHandler(_playerData)
+            {
+                IsEnable = true
+            };
+            _playerData.TriggerComponent.OnExit.AddListener(OnExitEntity);
+            _playerData.TriggerComponent.OnEnter.AddListener(OnEnterEntity);
         }
         public T Get<T>() where T : class
             => null;
@@ -36,10 +60,10 @@ namespace App.Content.Player
             if (!collider.TryGetComponent(out IEntity entity))
                 return;
             InteractableComp interactableComp = entity.Get<InteractableComp>();
-            if (interactableComp != null && interactableComp == _interactEntity)
+            if (interactableComp != null && interactableComp == _playerData.InteractionEntity)
             {
-                _interactEntity.IsEnable = false;
-                _interactEntity = null;
+                _playerData.InteractionEntity.IsEnable = false;
+                _playerData.InteractionEntity = null;
             }
         }
         private void OnEnterEntity(Collider collider)
@@ -68,11 +92,11 @@ namespace App.Content.Player
                         }
                     }
                 }
-                if (_interactEntity != null)
-                    _interactEntity.IsEnable = false;
+                if (_playerData.InteractionEntity != null)
+                    _playerData.InteractionEntity.IsEnable = false;
                 interactableComp.IsValid = true;
                 interactableComp.IsEnable = true;
-                _interactEntity = interactableComp;
+                _playerData.InteractionEntity = interactableComp;
             }
         }
     }
