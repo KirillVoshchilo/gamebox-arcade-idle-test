@@ -111,15 +111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c57411f31fa2247858e5f6e88f56e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildRequirements:
-    _requirements: []
-  _interactableComp:
-    _iconTransform: {fileID: 6234855495767375374}
-    _interactTime: 0
-    _recoverTime: 0
-  _requirementsPanelTarget: {fileID: 716079275975565654}
-  _buildingPrefab: {fileID: 0}
-  _builderTransform: {fileID: 6392596358979246102}
+  _buildingSiteData:
+    _buildRequirements:
+      _requirements: []
+    _requirementsPanelTransform: {fileID: 716079275975565654}
+    _buildingFactory: {fileID: 0}
+    _builderTransform: {fileID: 6392596358979246102}
+    _interactionIconTransform: {fileID: 6234855495767375374}
 --- !u!65 &3875576968848511622
 BoxCollider:
   m_ObjectHideFlags: 0

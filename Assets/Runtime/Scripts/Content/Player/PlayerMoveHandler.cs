@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace App.Content.Entities
+namespace App.Content.Player
 {
     public sealed class PlayerMoveHandler
     {

@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &44283351 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 99686410314752231, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-  m_PrefabInstance: {fileID: 211645394011373702}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16c4b328857252246853888a2a66a4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &232119868 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6800356512394042091, guid: 9b0d667b30deec44daee1a285961fd58, type: 3}
@@ -203,11 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b12ef12581ed643b544c2699203cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &1213339429 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 5438980569326656613, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-  m_PrefabInstance: {fileID: 211645394011373702}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1489536552 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4718123865953954178, guid: fd702a0120aeb554e9121ad9e04e6416, type: 3}
@@ -396,30 +380,6 @@ PrefabInstance:
     - target: {fileID: 1766945130134326204, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5438980569326656613, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6199910738503882437, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: _moveHandler._speed
-      value: 0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 6199910738503882437, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: _playerData._rigidbody
-      value: 
-      objectReference: {fileID: 1213339429}
-    - target: {fileID: 6199910738503882437, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: _playerData._transform
-      value: 
-      objectReference: {fileID: 1213339425}
-    - target: {fileID: 6199910738503882437, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: _playerData._triggerComponent
-      value: 
-      objectReference: {fileID: 44283351}
-    - target: {fileID: 6199910738503882437, guid: cb31d957821ee2e4f86c507e70fa77d0, type: 3}
-      propertyPath: _playerData._defaultMovingSpeed
-      value: 0.16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

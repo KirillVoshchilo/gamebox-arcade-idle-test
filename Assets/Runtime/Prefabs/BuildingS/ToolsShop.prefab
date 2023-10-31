@@ -47,10 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e09a9148de06b247a89b7714c826bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactableComp:
-    _iconTransform: {fileID: 7991935388543959009}
-    _interactTime: 0
-    _recoverTime: 0
   _priceList:
   - _key: {fileID: 11400000, guid: d397af54a3f35dc4b90c385f7a2ba805, type: 2}
     _cost:
@@ -62,6 +58,19 @@ MonoBehaviour:
       _count: 2
     - _name: {fileID: 11400000, guid: 8cb786425129ec54496f5ab38651c247, type: 2}
       _count: 2
+  _shopData:
+    _priceList:
+    - _key: {fileID: 11400000, guid: d397af54a3f35dc4b90c385f7a2ba805, type: 2}
+      _cost:
+      - _name: {fileID: 11400000, guid: e2f059133e3124e4dae975e6d96ab7bd, type: 2}
+        _count: 2
+    - _key: {fileID: 11400000, guid: edd1bca0ad0cc0b4cbeb520b223413d9, type: 2}
+      _cost:
+      - _name: {fileID: 11400000, guid: e2f059133e3124e4dae975e6d96ab7bd, type: 2}
+        _count: 2
+      - _name: {fileID: 11400000, guid: 8cb786425129ec54496f5ab38651c247, type: 2}
+        _count: 2
+    _interactionIconTransform: {fileID: 7991935388543959009}
 --- !u!65 &3123545932202747859
 BoxCollider:
   m_ObjectHideFlags: 0

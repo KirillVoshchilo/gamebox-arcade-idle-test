@@ -10,86 +10,109 @@ namespace App.Content.Buildings
 {
     public sealed class BuildingSiteEntity : MonoBehaviour, IEntity, IDestructable
     {
-        [SerializeField] private InteractionRequirementsComp _buildRequirements;
-        [SerializeField] private InteractableComp _interactableComp;
-        [SerializeField] private Transform _requirementsPanelTarget;
-        [SerializeField] private AScriptableFactory _buildingFactory;
-        [SerializeField] private Transform _builderTransform;
-
-        private PlayerInventorySystem _playerInventory;
-        private WorldCanvasStorage _worldCanvasStorage;
+        [SerializeField] private BuildingSiteData _buildingSiteData;
 
         [Inject]
         public void Construct(PlayerInventorySystem playerInventorySystem,
         WorldCanvasStorage worldCanvasStorage,
         IAppInputSystem appInputSystem)
         {
-            _interactableComp.Construct(appInputSystem);
-            _playerInventory = playerInventorySystem;
-            _worldCanvasStorage = worldCanvasStorage;
-            _interactableComp.OnEnable.AddListener(OnEnabled);
-            _interactableComp.OnPerformed.AddListener(OnPerformedInteraction);
+            _buildingSiteData.AppInputSystem = appInputSystem;
+            _buildingSiteData.PlayerInventory = playerInventorySystem;
+            _buildingSiteData.WorldCanvasStorage = worldCanvasStorage;
+            _buildingSiteData.InteractableComp.OnFocusChanged.AddListener(OnInteractionFocusChanged);
+
         }
         public void Destruct()
         {
-            _interactableComp.OnEnable.ClearListeners();
-            _interactableComp.OnPerformed.ClearListeners();
-        }
-
-        private void OnEnabled(bool obj)
-        {
-            if (obj)
-            {
-                _worldCanvasStorage.RequirementsPanel.SetPosition(_requirementsPanelTarget.position);
-                _worldCanvasStorage.RequirementsPanel.gameObject.SetActive(true);
-                _worldCanvasStorage.RequirementsPanel.FillWithItems(_buildRequirements.Requirements);
-                _worldCanvasStorage.RequirementsPanel.IsEnable = true;
-                if (CheckRequirement())
-                {
-                    _interactableComp.IsValid = true;
-                    _worldCanvasStorage.InteractIcon.SetPosition(_interactableComp.IconTransform.position);
-                    _worldCanvasStorage.InteractIcon.gameObject.SetActive(true);
-                    _worldCanvasStorage.InteractIcon.IsEnable = true;
-                    _worldCanvasStorage.InteractIcon.OpenTip();
-                    _worldCanvasStorage.InteractIcon.HoldMode = false;
-                }
-                else _interactableComp.IsValid = false;
-            }
-            else
-            {
-                _worldCanvasStorage.RequirementsPanel.IsEnable = false;
-                _worldCanvasStorage.RequirementsPanel.Clear();
-                _worldCanvasStorage.RequirementsPanel.gameObject.SetActive(false);
-                _worldCanvasStorage.InteractIcon.CloseProgress();
-                _worldCanvasStorage.InteractIcon.CloseTip();
-                _worldCanvasStorage.InteractIcon.IsEnable = false;
-                _worldCanvasStorage.InteractIcon.gameObject.SetActive(false);
-            }
-        }
-        private void OnPerformedInteraction()
-        {
-            if (!CheckRequirement())
-                return;
-            foreach (ItemCount item in _buildRequirements.Requirements)
-                _playerInventory.RemoveItem(item.Key, item.Count);
-            _buildingFactory.Parent = _builderTransform;
-            _buildingFactory.Create();
-            Destroy(gameObject);
-        }
-        private bool CheckRequirement()
-        {
-            foreach (ItemCount item in _buildRequirements.Requirements)
-            {
-                if (_playerInventory.GetCount(item.Key) < item.Count)
-                    return false;
-            }
-            return true;
+            CloseRequirementsPanel();
+            DisableInteraction();
+            CloseInteractionIcon();
+            _buildingSiteData.InteractableComp.OnFocusChanged.RemoveListener(OnInteractionFocusChanged);
         }
         public T Get<T>() where T : class
         {
-            if (typeof(T) == typeof(InteractableComp))
-                return _interactableComp as T;
+            if (typeof(T) == typeof(InteractionComp))
+                return _buildingSiteData.InteractableComp as T;
             return null;
+        }
+
+        private void OnInteractionFocusChanged(bool obj)
+        {
+            if (obj)
+            {
+                ShowRequirementsPanel();
+                CheckInteractable();
+                if (_buildingSiteData.IsInteractable)
+                {
+                    ShowInteractionIcon();
+                    EnableInteraction();
+                }
+
+            }
+            else
+            {
+                CloseRequirementsPanel();
+                if (_buildingSiteData.IsInteractable == true)
+                    DisableInteraction();
+                CloseInteractionIcon();
+            }
+        }
+        private void ShowRequirementsPanel()
+        {
+            _buildingSiteData.RequirementsPanel.SetPosition(_buildingSiteData.RequirementsPanelPosition);
+            _buildingSiteData.RequirementsPanel.gameObject.SetActive(true);
+            _buildingSiteData.RequirementsPanel.FillWithItems(_buildingSiteData.BuildRequirements);
+            _buildingSiteData.RequirementsPanel.IsEnable = true;
+        }
+        private void CloseRequirementsPanel()
+        {
+            _buildingSiteData.RequirementsPanel.IsEnable = false;
+            _buildingSiteData.RequirementsPanel.Clear();
+            _buildingSiteData.RequirementsPanel.gameObject.SetActive(false);
+        }
+        private void EnableInteraction()
+        {
+            _buildingSiteData.AppInputSystem.OnInteractionPerformed.AddListener(OnInteractionPerformed);
+            _buildingSiteData.AppInputSystem.SetInteractionTime(_buildingSiteData.InteractTime);
+        }
+        private void DisableInteraction()
+            => _buildingSiteData.AppInputSystem.OnInteractionPerformed.RemoveListener(OnInteractionPerformed);
+        private void OnInteractionPerformed()
+        {
+            foreach (ItemCount item in _buildingSiteData.BuildRequirements)
+                _buildingSiteData.PlayerInventory.RemoveItem(item.Key, item.Count);
+            _buildingSiteData.BuildingFactory.Parent = _buildingSiteData.BuilderTransform;
+            _buildingSiteData.BuildingFactory.Create();
+            Destruct();
+            Destroy(gameObject);
+        }
+        private void ShowInteractionIcon()
+        {
+            _buildingSiteData.InteractIcon.SetPosition(_buildingSiteData.InteractionIconPosition);
+            _buildingSiteData.InteractIcon.gameObject.SetActive(true);
+            _buildingSiteData.InteractIcon.IsEnable = true;
+            _buildingSiteData.InteractIcon.OpenTip();
+            _buildingSiteData.InteractIcon.HoldMode = false;
+        }
+        private void CloseInteractionIcon()
+        {
+            _buildingSiteData.InteractIcon.CloseProgress();
+            _buildingSiteData.InteractIcon.CloseTip();
+            _buildingSiteData.InteractIcon.IsEnable = false;
+            _buildingSiteData.InteractIcon.gameObject.SetActive(false);
+        }
+        private void CheckInteractable()
+        {
+            foreach (ItemCount item in _buildingSiteData.BuildRequirements)
+            {
+                if (_buildingSiteData.PlayerInventory.GetCount(item.Key) < item.Count)
+                {
+                    _buildingSiteData.IsInteractable = false;
+                    return;
+                }
+            }
+            _buildingSiteData.IsInteractable = true;
         }
     }
 }

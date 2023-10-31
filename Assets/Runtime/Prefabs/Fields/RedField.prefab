@@ -245,17 +245,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aea854a6bd28c94dbe92ed31171263f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactableComp:
-    _iconTransform: {fileID: 911800493070062654}
-    _interactTime: 1
-    _recoverTime: 5
   _key: {fileID: 11400000, guid: e2f059133e3124e4dae975e6d96ab7bd, type: 2}
   _itemsCount: 1
   _crystal: {fileID: 7875835481229514447}
   _fieldData:
-    _requirements:
-    - _name: {fileID: 11400000, guid: 290570a7a28a19941878743974d7a4f1, type: 2}
-      _count: 1
+    _key: {fileID: 11400000, guid: e2f059133e3124e4dae975e6d96ab7bd, type: 2}
+    _itemsCount: 1
+    _crystal: {fileID: 7875835481229514447}
+    _fieldRequirements:
+      _requirements:
+      - _name: {fileID: 11400000, guid: 290570a7a28a19941878743974d7a4f1, type: 2}
+        _count: 1
+    _interactionIconTransform: {fileID: 911800493070062654}
+    _interactTime: 1
+    _recoverTime: 2
 --- !u!136 &141806383804409243
 CapsuleCollider:
   m_ObjectHideFlags: 0

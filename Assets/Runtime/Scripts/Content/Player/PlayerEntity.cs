@@ -1,5 +1,4 @@
 ﻿using App.Architecture;
-using App.Architecture.AppData;
 using App.Architecture.AppInput;
 using App.Content.Entities;
 using App.Logic;
@@ -13,15 +12,14 @@ namespace App.Content.Player
         [SerializeField] private PlayerData _playerData;
 
         private PlayerMoveHandler _moveHandler;
-        private PlayerInventorySystem _playerInventorySystem;
-        private bool _isEnable;
+
 
         public bool IsEnable
         {
-            get => _isEnable;
+            get => _playerData.IsEnable;
             set
             {
-                _isEnable = value;
+                _playerData.IsEnable = value;
                 if (value)
                 {
                     _playerData.TriggerComponent.OnExit.AddListener(OnExitEntity);
@@ -44,7 +42,7 @@ namespace App.Content.Player
         {
             _playerData.AppInputSystem = appInputSystem;
             _playerData.MainCameraTransform = camerasStorage.MainCamera.transform;
-            _playerInventorySystem = playerInventorySystem;
+            _playerData.PlayerInventorySystem = playerInventorySystem;
             _moveHandler = new PlayerMoveHandler(_playerData)
             {
                 IsEnable = true
@@ -59,10 +57,10 @@ namespace App.Content.Player
         {
             if (!collider.TryGetComponent(out IEntity entity))
                 return;
-            InteractableComp interactableComp = entity.Get<InteractableComp>();
+            InteractionComp interactableComp = entity.Get<InteractionComp>();
             if (interactableComp != null && interactableComp == _playerData.InteractionEntity)
             {
-                _playerData.InteractionEntity.IsEnable = false;
+                _playerData.InteractionEntity.IsInFocus = false;
                 _playerData.InteractionEntity = null;
             }
         }
@@ -74,28 +72,12 @@ namespace App.Content.Player
         }
         private void InteractableIntityEnter(IEntity entity)
         {
-            InteractableComp interactableComp = entity.Get<InteractableComp>();
+            InteractionComp interactableComp = entity.Get<InteractionComp>();
             if (interactableComp != null)
             {
-                InteractionRequirementsComp interactionRequirements = entity.Get<InteractionRequirementsComp>();
-                if (interactionRequirements != null)
-                {
-                    int count = interactionRequirements.Requirements.Length;
-                    for (int i = 0; i < count; i++)
-                    {
-                        Key key = interactionRequirements.Requirements[i].Key;
-                        int quantity = _playerInventorySystem.GetCount(key);
-                        if (quantity < interactionRequirements.Requirements[i].Count)
-                        {
-                            interactableComp.IsValid = false;
-                            return;
-                        }
-                    }
-                }
                 if (_playerData.InteractionEntity != null)
-                    _playerData.InteractionEntity.IsEnable = false;
-                interactableComp.IsValid = true;
-                interactableComp.IsEnable = true;
+                    _playerData.InteractionEntity.IsInFocus = false;
+                interactableComp.IsInFocus = true;
                 _playerData.InteractionEntity = interactableComp;
             }
         }

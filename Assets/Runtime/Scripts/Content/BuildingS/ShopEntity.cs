@@ -9,55 +9,60 @@ namespace App.Content.Buildings
 {
     public sealed class ShopEntity : MonoBehaviour, IEntity, IDestructable
     {
-        [SerializeField] private InteractableComp _interactableComp;
-        [SerializeField] private ItemCost[] _priceList;
-
-        private WorldCanvasStorage _worldCanvasStorage;
-        private UIController _uiController;
+        [SerializeField] private ShopData _shopData;
 
         [Inject]
         public void Construct(UIController uiController,
             WorldCanvasStorage worldCanvasStorage,
             IAppInputSystem appInputSystem)
         {
-            _uiController = uiController;
-            _interactableComp.Construct(appInputSystem);
-            _worldCanvasStorage = worldCanvasStorage;
-            _interactableComp.OnEnable.AddListener(OnEnabled);
-            _interactableComp.OnPerformed.AddListener(OnPerformedInteraction);
+            _shopData.AppInputSystem = appInputSystem;
+            _shopData.UIController = uiController;
+            _shopData.WorldCanvasStorage = worldCanvasStorage;
+            _shopData.InteractableComp.OnFocusChanged.AddListener(OnFocusChanged);
         }
         public T Get<T>() where T : class
         {
-            if (typeof(T) == typeof(InteractableComp))
-                return _interactableComp as T;
+            if (typeof(T) == typeof(InteractionComp))
+                return _shopData.InteractableComp as T;
             return null;
         }
         public void Destruct()
         {
-            _interactableComp.OnEnable.ClearListeners();
-            _interactableComp.OnPerformed.ClearListeners();
+            _shopData.InteractableComp.OnFocusChanged.RemoveListener(OnFocusChanged);
+            _shopData.AppInputSystem.OnInteractionPerformed.ClearListeners();
         }
 
-        private void OnEnabled(bool obj)
+        private void OnFocusChanged(bool obj)
         {
             if (obj)
             {
-                _interactableComp.IsValid = true;
-                _worldCanvasStorage.InteractIcon.SetPosition(_interactableComp.IconTransform.position);
-                _worldCanvasStorage.InteractIcon.gameObject.SetActive(true);
-                _worldCanvasStorage.InteractIcon.IsEnable = true;
-                _worldCanvasStorage.InteractIcon.OpenTip();
-                _worldCanvasStorage.InteractIcon.HoldMode = false;
+                ShowInteractionIcon();
+                _shopData.AppInputSystem.SetInteractionTime(_shopData.InteractTime);
+                _shopData.AppInputSystem.OnInteractionPerformed.AddListener(OnPerformedInteraction);
             }
             else
             {
-                _worldCanvasStorage.InteractIcon.CloseProgress();
-                _worldCanvasStorage.InteractIcon.CloseTip();
-                _worldCanvasStorage.InteractIcon.IsEnable = false;
-                _worldCanvasStorage.InteractIcon.gameObject.SetActive(false);
+                CloseInteractionIcon();
+                _shopData.AppInputSystem.OnInteractionPerformed.ClearListeners();
             }
         }
+        private void CloseInteractionIcon()
+        {
+            _shopData.InteractIcon.CloseProgress();
+            _shopData.InteractIcon.CloseTip();
+            _shopData.InteractIcon.IsEnable = false;
+            _shopData.InteractIcon.gameObject.SetActive(false);
+        }
+        private void ShowInteractionIcon()
+        {
+            _shopData.InteractIcon.SetPosition(_shopData.InteractionIconPosition);
+            _shopData.InteractIcon.gameObject.SetActive(true);
+            _shopData.InteractIcon.IsEnable = true;
+            _shopData.InteractIcon.OpenTip();
+            _shopData.InteractIcon.HoldMode = false;
+        }
         private void OnPerformedInteraction()
-            => _uiController.OpenShop(_priceList);
+            => _shopData.UIController.OpenShop(_shopData.PriceList);
     }
 }
